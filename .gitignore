@@ -5,3 +5,4 @@
 /*/test-tmp/
 .gradletasknamecache
 **/test-tmp/**
+*.DS_Store

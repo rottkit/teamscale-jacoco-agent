@@ -3,6 +3,7 @@ plugins {
 	id 'java'
 	id 'application'
 
+
 	// we don't want to cause conflicts between our dependencies and the target application
 	// since the agent will be loaded with the same class loader as the profiled application
 	// so we use the shadow plugin to relocate our dependencies
@@ -14,8 +15,18 @@ version appVersion
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 
+group 'eu.cqse'
+version pluginVersion
+
 ext {
     outputVersion = rootProject.appVersion + '-jacoco-' + jacocoVersion
+}
+
+jar {
+	classifier = null
+	manifest {
+		attributes 'Premain-Class': 'eu.cqse.teamscale.jacoco.agent.PreMain'
+	}
 }
 
 dependencies {
@@ -38,8 +49,22 @@ dependencies {
 
 	implementation 'com.squareup.moshi:moshi:1.8.0'
 
+	implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
+	implementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.2.0'
+	implementation group: 'org.junit.platform', name: 'junit-platform-engine', version: '1.2.0'
+	implementation group: 'org.junit.platform', name: 'junit-platform-console', version: '1.2.0'
+
+	compile group: 'org.ow2.asm', name: 'asm', version: '6.2.1'
+
+	compile group: 'junit', name: 'junit', version: '4.12'
+	compile group: 'org.testng', name: 'testng', version: '6.11'
+
+	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+	implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.assertj:assertj-core:3.8.0'
+
+	testRuntime("org.junit.vintage:junit-vintage-engine:4.12.3")
 }
 
 test {
@@ -75,28 +100,6 @@ task relocateShadowJar(type: ConfigureShadowRelocation) {
 }
 
 tasks.shadowJar.dependsOn tasks.relocateShadowJar
-
-startShadowScripts {
-    applicationName = 'convert'
-}
-
-distributions {
-	shadow {
-		baseName = 'teamscale-jacoco-agent'
-		contents {
-			from(readmeToPdf) {
-				into 'documentation'
-				rename 'README.pdf', 'userguide.pdf'
-			}
-
-			filesMatching('**/VERSION.txt') {
-				filter {
-					it.replace('%APP_VERSION_TOKEN_REPLACED_DURING_BUILD%', outputVersion)
-				}
-			}
-		}
-	}
-}
 
 tasks.named('shadowDistZip').configure {
 	archiveName = 'teamscale-jacoco-agent.zip'
