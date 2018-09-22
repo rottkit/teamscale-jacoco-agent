@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration>
 	<Appenders>
-		<RollingFile name="RollingFile" fileName="./cqse-jacoco-agent.errors.log"
-				filePattern="./cqse-jacoco-agent-%i.errors.log">
+		<RollingFile name="RollingFileInfo" fileName="./cqse-jacoco-agent.info.log"
+					 filePattern="./cqse-jacoco-agent-%i.info.log">
 			<PatternLayout
-				pattern="%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n" />
+					pattern="%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n" />
 			<Policies>
 				<SizeBasedTriggeringPolicy size="1MB" />
 			</Policies>
@@ -12,8 +12,8 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="WARN">
-			<AppenderRef ref="RollingFile" />
+		<Root level="DEBUG">
+			<AppenderRef ref="RollingFileInfo" />
 		</Root>
 	</Loggers>
 </Configuration>

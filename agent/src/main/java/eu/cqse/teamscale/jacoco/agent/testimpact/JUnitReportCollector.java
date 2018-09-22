@@ -67,10 +67,13 @@ public class JUnitReportCollector implements ITestListener {
 				break;
 			case SKIPPED:
 				currentTestCase.setSkipped(request.body());
+				break;
 			case IGNORED:
 				currentTestCase.setIgnored(true);
+				break;
 			case ERROR:
 				currentTestCase.setError(request.body());
+				break;
 			case FAILURE:
 				currentTestCase.setFailure(request.body());
 		}
@@ -84,7 +87,7 @@ public class JUnitReportCollector implements ITestListener {
 			try {
 				return ETestExecutionResult.valueOf(result);
 			} catch (IllegalArgumentException e) {
-				logger.error("'" + result + "' is not a valid test execution result! Use can use any of " + Arrays
+				logger.error("'" + result + "' is not a valid test execution result! You can use any of " + Arrays
 						.toString(ETestExecutionResult.values()), e);
 			}
 		}

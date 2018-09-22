@@ -39,6 +39,9 @@ public class TestImpactAgent extends AgentBase {
 	/** Path parameter placeholder used in the http requests. */
 	public static final String TEST_ID_PARAMETER = ":testId";
 
+	/** Result parameter placeholder used in the http requests. */
+	public static final String RESULT_PARAMETER = ":result";
+
 	/** The agent options. */
 	private AgentOptions options;
 
@@ -88,7 +91,7 @@ public class TestImpactAgent extends AgentBase {
 			return "success";
 		});
 
-		post("/test/end/" + TEST_ID_PARAMETER, (request, response) -> {
+		post("/test/end/" + TEST_ID_PARAMETER + "/" + RESULT_PARAMETER, (request, response) -> {
 			handleTestEnd(request);
 			return "success";
 		});
