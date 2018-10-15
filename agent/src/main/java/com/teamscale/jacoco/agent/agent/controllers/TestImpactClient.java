@@ -11,7 +11,7 @@ public interface TestImpactClient {
     Call<String> handleTestStart(@Path("testId") String testId, @Body TestDetails testDetails);
 
     @POST("test/end/{testId}/{result}")
-    Call<String> handleTestEnd(@Path("testId") String testId, @Body TestDetails testDetails, @Path("result") String result);
+    Call<String> handleTestEnd(@Path("testId") String testId, @Body String commandLineOutput, @Path("result") String result);
 
     @POST("dump")
     Call<String> dumpReport(@Body TestDetails testDetails);
