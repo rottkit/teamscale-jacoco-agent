@@ -4,6 +4,7 @@ import eu.cqse.teamscale.client.TestDetails;
 import eu.cqse.teamscale.jacoco.agent.controllers.JaCoCoAgentController;
 import eu.cqse.teamscale.jacoco.agent.testimpact.ETestExecutionResult;
 import org.conqat.lib.commons.string.StringUtils;
+import org.junit.platform.commons.util.ExceptionUtils;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -16,6 +17,8 @@ import java.io.File;
 public class JUnit4Listener extends RunListener {
     private static final Description FAILED = Description.createTestDescription("Test failed", "Test failed");
 
+    private Throwable lastThrownException = null;
+
     @Override
     public void testStarted(Description description) {
         JaCoCoAgentController.getInstance().onTestStart(createTestDetailsFromDescription(description));
@@ -24,11 +27,16 @@ public class JUnit4Listener extends RunListener {
     @Override
     public void testFinished(Description description) {
         String result = ETestExecutionResult.PASSED.name();
+        String consoleOutput = StringUtils.EMPTY_STRING;
+
         if (description.getChildren().contains(FAILED)) {
             result = ETestExecutionResult.FAILURE.name();
+            consoleOutput = ExceptionUtils.readStackTrace(lastThrownException);
+            lastThrownException = null;
         }
 
-        JaCoCoAgentController.getInstance().onTestFinish(createTestDetailsFromDescription(description), result);
+        JaCoCoAgentController.getInstance().onTestFinish(createTestDetailsFromDescription(description), result,
+                consoleOutput);
     }
 
     @Override
@@ -38,11 +46,13 @@ public class JUnit4Listener extends RunListener {
     @Override
     public void testFailure(Failure failure) throws Exception {
         failure.getDescription().addChild(FAILED);
+        lastThrownException = failure.getException();
     }
 
     @Override
     public void testIgnored(Description description) throws Exception {
-        JaCoCoAgentController.getInstance().onTestFinish(createTestDetailsFromDescription(description), ETestExecutionResult.IGNORED.name());
+        JaCoCoAgentController.getInstance().onTestStart(createTestDetailsFromDescription(description));
+        JaCoCoAgentController.getInstance().onTestFinish(createTestDetailsFromDescription(description), ETestExecutionResult.IGNORED.name(), StringUtils.EMPTY_STRING);
     }
 
     private TestDetails createTestDetailsFromDescription(Description description) {
