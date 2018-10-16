@@ -30,7 +30,7 @@ public class TeamscaleClient {
 	public TeamscaleClient(String baseUrl, String user, String accessToken, String projectId) {
 		this.projectId = projectId;
 		service = TeamscaleServiceGenerator
-				.createService(ITeamscaleService.class, HttpUrl.parse(baseUrl), user, accessToken);
+				.createService(ITeamscaleService.class, baseUrl, user, accessToken);
 	}
 
 	/** Uploads multiple reports to Teamscale. */

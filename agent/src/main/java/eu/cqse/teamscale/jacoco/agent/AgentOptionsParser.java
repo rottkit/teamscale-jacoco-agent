@@ -181,7 +181,7 @@ public class AgentOptionsParser {
 	private static boolean handleTeamscaleOptions(AgentOptions options, String key, String value) throws AgentOptionParseException {
 		switch (key) {
 			case "teamscale-server-url":
-				options.teamscaleServer.url = parseUrl(value);
+				options.teamscaleServer.url = parseUrl(value).toString();
 				if (options.teamscaleServer.url == null) {
 					throw new AgentOptionParseException(
 							"Invalid URL " + value + " given for option 'teamscale-server-url'!");

@@ -16,7 +16,7 @@ public class TeamscaleServiceGenerator {
 	 * Generates a {@link Retrofit} instance for the given
 	 * service, which uses basic auth to authenticate against the server and which sets the accept header to json.
 	 */
-	public static <S> S createService(Class<S> serviceClass, HttpUrl baseUrl, String username, String password) {
+	public static <S> S createService(Class<S> serviceClass, String baseUrl, String username, String password) {
 		OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
 		httpClient.addInterceptor(TeamscaleServiceGenerator.getBasicAuthInterceptor(username, password));

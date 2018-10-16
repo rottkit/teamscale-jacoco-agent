@@ -1,12 +1,10 @@
 package eu.cqse.teamscale.client;
 
-import okhttp3.HttpUrl;
-
 /** Holds Teamscale server details. */
 public class TeamscaleServer {
 
 	/** The URL of the Teamscale server. */
-	public HttpUrl url;
+	public String url;
 
 	/** The project id within Teamscale. */
 	public String project;

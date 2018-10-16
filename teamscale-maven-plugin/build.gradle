@@ -1,0 +1,48 @@
+buildscript {
+    dependencies {
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.maven.plugin.builder", version: "1.1.2"
+    }
+
+    repositories {
+        maven {
+            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+        }
+    }
+}
+
+group = 'eu.cqse'
+version = '1.0'
+
+apply plugin: 'com.liferay.maven.plugin.builder'
+apply plugin: 'maven'
+
+buildPluginDescriptor {
+    goalPrefix 'teamscale'
+    pomArtifactId 'teamscale-maven-plugin'
+    useSetterComments false
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':teamscale-client')
+    compile group: 'org.apache.maven', name: 'maven-plugin-api', version: '3.5.0'
+    compile group: 'org.apache.maven', name: 'maven-project', version: '2.2.1'
+    compile group: 'org.apache.maven.plugin-tools', name: 'maven-plugin-annotations', version: '3.5'
+    compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '3.2.0.201312181205-r'
+}
+
+uploadArchives {
+    repositories {
+        mavenLocal()
+        mavenDeployer {
+            repository(url: mavenLocal().url)
+            pom.groupId = rootProject.group
+            pom.artifactId = project.name
+            pom.version = rootProject.version
+        }
+    }
+}
