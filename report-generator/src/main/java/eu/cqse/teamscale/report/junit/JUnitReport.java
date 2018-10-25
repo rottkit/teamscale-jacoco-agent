@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /** Container for a JUnit test report. */
 @XmlRootElement(name = "testsuite")
@@ -72,7 +73,7 @@ public class JUnitReport {
 		/** Returns the duration in seconds as string with 3 trailing digits. */
 		@XmlAttribute(name = "time")
 		public String getDurationInSeconds() {
-			return String.format("%.3f", durationInSeconds);
+			return String.format(Locale.US, "%.3f", durationInSeconds);
 		}
 
 		/** @see #durationInSeconds */
