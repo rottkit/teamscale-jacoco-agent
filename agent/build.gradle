@@ -46,8 +46,8 @@ dependencies {
     implementation "org.apache.logging.log4j:log4j-core:$log4jVersion"
 
     implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
-    implementation 'com.beust:jcommander:1.71'
-    implementation 'org.conqat:org.conqat.lib.commons:0.20160822'
+    compileOnly 'com.beust:jcommander:1.71'
+    compileOnly 'org.conqat:org.conqat.lib.commons:0.20160822'
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.sparkjava:spark-core:2.7.2'
