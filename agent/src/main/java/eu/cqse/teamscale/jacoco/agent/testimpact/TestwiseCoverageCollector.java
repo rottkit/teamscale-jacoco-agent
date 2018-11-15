@@ -49,22 +49,21 @@ public class TestwiseCoverageCollector implements ITestListener {
 	public void onTestStart(Request request, Dump dump) {
 		String testId = request.params(TestImpactAgent.TEST_ID_PARAMETER);
 		if (testId.endsWith(TestDetails.AFTER_CLASS_SUFFIX)){
+			SessionInfo unnamedSessionInfo = dump.info;
+			SessionInfo sessionInfo = new SessionInfo(testId, unnamedSessionInfo.getStartTimeStamp(), unnamedSessionInfo.getDumpTimeStamp());
+			onTestFinish(request, new Dump(sessionInfo, dump.store));
 			return;
 		}
+
 		// Reset coverage so that we only record coverage that belongs to this particular test case.
 		// Dumps from previous tests are stored in #dumps
+		// TODO: coverage already reset in TestImpactAgent#handleTestStart
 		controller.reset();
 		controller.setSessionId(testId);
 	}
 
 	@Override
 	public void onTestFinish(Request request, Dump dump) {
-		String testId = request.params(TestImpactAgent.TEST_ID_PARAMETER);
-		if (testId.endsWith(TestDetails.AFTER_CLASS_SUFFIX)){
-			SessionInfo unnamedSessionInfo = dump.info;
-			SessionInfo sessionInfo= new SessionInfo(testId, unnamedSessionInfo.getStartTimeStamp(), unnamedSessionInfo.getDumpTimeStamp());
-			dump = new Dump(sessionInfo, dump.store);
-		}
 		dumps.add(dump);
 	}
 
