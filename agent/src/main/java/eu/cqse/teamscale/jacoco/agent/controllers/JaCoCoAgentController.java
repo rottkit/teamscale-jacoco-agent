@@ -21,6 +21,7 @@ public class JaCoCoAgentController {
 
 	/** Reference to the test-impact-analysis client that sends the requests invoked by the test listener. */
 	private final TestImpactClient tiaClient;
+	public static final String MESSAGE_BEFORE_AFTER_TEST = "Method executed before tests in class ";
 
 	private TestDetails testDetailsOfCurrentTest;
 
@@ -52,9 +53,15 @@ public class JaCoCoAgentController {
 	public void onTestStart(TestDetails testDetails) {
 		try {
 			if (Objects.nonNull(testDetailsOfCurrentTest)) {
-				String message = "For test " + testDetails.externalId + " there was no end event passed to the test listener; assume that it ended now with an error.";
-				System.out.println(message);
-				onTestFinish(testDetails, ETestExecutionResult.ERROR.name(), message);
+				if (testDetailsOfCurrentTest.internalId.endsWith(TestDetails.BEFORE_CLASS_SUFFIX)) {
+					onTestFinish(testDetailsOfCurrentTest, ETestExecutionResult.PASSED.toString(),
+							MESSAGE_BEFORE_AFTER_TEST + StringUtils
+									.stripSuffix(testDetailsOfCurrentTest.internalId, TestDetails.BEFORE_CLASS_SUFFIX));
+				} else {
+					String message = "For test " + testDetailsOfCurrentTest.externalId + " there was no end event passed to the test listener; assume that it ended now with an error.";
+					System.out.println(message);
+					onTestFinish(testDetailsOfCurrentTest, ETestExecutionResult.ERROR.name(), message);
+				}
 			}
 
 			testDetailsOfCurrentTest = testDetails;

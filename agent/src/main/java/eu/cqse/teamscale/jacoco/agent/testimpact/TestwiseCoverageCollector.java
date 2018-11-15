@@ -1,5 +1,6 @@
 package eu.cqse.teamscale.jacoco.agent.testimpact;
 
+import eu.cqse.teamscale.client.TestDetails;
 import eu.cqse.teamscale.jacoco.agent.AgentOptions;
 import eu.cqse.teamscale.jacoco.agent.ITestListener;
 import eu.cqse.teamscale.jacoco.agent.JacocoRuntimeController;
@@ -10,6 +11,7 @@ import eu.cqse.teamscale.report.testwise.jacoco.TestwiseXmlReportGenerator;
 import eu.cqse.teamscale.report.testwise.jacoco.cache.CoverageGenerationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jacoco.core.data.SessionInfo;
 import spark.Request;
 
 import java.io.IOException;
@@ -45,15 +47,24 @@ public class TestwiseCoverageCollector implements ITestListener {
 
 	@Override
 	public void onTestStart(Request request, Dump dump) {
+		String testId = request.params(TestImpactAgent.TEST_ID_PARAMETER);
+		if (testId.endsWith(TestDetails.AFTER_CLASS_SUFFIX)){
+			return;
+		}
 		// Reset coverage so that we only record coverage that belongs to this particular test case.
 		// Dumps from previous tests are stored in #dumps
 		controller.reset();
-		String testId = request.params(TestImpactAgent.TEST_ID_PARAMETER);
 		controller.setSessionId(testId);
 	}
 
 	@Override
 	public void onTestFinish(Request request, Dump dump) {
+		String testId = request.params(TestImpactAgent.TEST_ID_PARAMETER);
+		if (testId.endsWith(TestDetails.AFTER_CLASS_SUFFIX)){
+			SessionInfo unnamedSessionInfo = dump.info;
+			SessionInfo sessionInfo= new SessionInfo(testId, unnamedSessionInfo.getStartTimeStamp(), unnamedSessionInfo.getDumpTimeStamp());
+			dump = new Dump(sessionInfo, dump.store);
+		}
 		dumps.add(dump);
 	}
 

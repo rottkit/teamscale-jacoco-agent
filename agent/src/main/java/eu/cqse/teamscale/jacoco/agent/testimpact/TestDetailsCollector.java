@@ -28,6 +28,10 @@ public class TestDetailsCollector implements ITestListener {
 
 	@Override
 	public void onTestStart(Request request, Dump dump) {
+		addTestDetail(request);
+	}
+
+	private void addTestDetail(Request request) {
 		TestDetails testDetails = getTestDetailsFromRequest(request, logger);
 		if (testDetails != null) {
 			this.testDetailsList.add(testDetails);

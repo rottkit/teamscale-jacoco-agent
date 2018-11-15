@@ -40,8 +40,15 @@ public class JUnitReportCollector implements ITestListener {
 
 	@Override
 	public void onTestStart(Request request, Dump dump) {
-		startTimestamp = System.currentTimeMillis();
+		String testId = request.params(TestImpactAgent.TEST_ID_PARAMETER);
+		if (!testId.endsWith(TestDetails.AFTER_CLASS_SUFFIX)){
+			startTimestamp = System.currentTimeMillis();
+		}
 
+		setCurrentTestCase(request);
+	}
+
+	private void setCurrentTestCase(Request request) {
 		TestDetails testDetails = getTestDetailsFromRequest(request, logger);
 		if (testDetails == null) {
 			currentTestCase = null;
@@ -78,6 +85,8 @@ public class JUnitReportCollector implements ITestListener {
 				currentTestCase.setFailure(request.body());
 		}
 		report.add(currentTestCase);
+		// for after-class methods (expect small deviation)
+		startTimestamp = System.currentTimeMillis();
 	}
 
 	/** Parses the result from the query. */

@@ -6,6 +6,9 @@ package eu.cqse.teamscale.client;
  */
 public class TestDetails {
 
+	public static final String BEFORE_CLASS_SUFFIX = "**before-class**";
+	public static final String AFTER_CLASS_SUFFIX = "**after-class**";
+
 	/** Unique name of the test case which can be used by an external build system to find and execute the test. */
 	public final String externalId;
 
