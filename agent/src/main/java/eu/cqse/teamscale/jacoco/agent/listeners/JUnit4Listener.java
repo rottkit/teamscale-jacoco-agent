@@ -61,6 +61,7 @@ public class JUnit4Listener extends RunListener {
         JaCoCoAgentController.getInstance().onTestStart(nextToUseAfterClassDetails);
         JaCoCoAgentController.getInstance().onTestFinish(nextToUseAfterClassDetails, ETestExecutionResult.PASSED.toString(), MESSAGE_BEFORE_AFTER_TEST + StringUtils
                 .stripSuffix(nextToUseAfterClassDetails.internalId, TestDetails.AFTER_CLASS_SUFFIX));
+        System.out.println("Total round trip time until now in ms: " + JaCoCoAgentController.getInstance().getTotalResponeTimeMs());
     }
 
 

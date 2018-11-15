@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import eu.cqse.teamscale.client.TestDetails;
 import eu.cqse.teamscale.jacoco.agent.testimpact.ETestExecutionResult;
 import org.conqat.lib.commons.string.StringUtils;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -24,6 +25,8 @@ public class JaCoCoAgentController {
 	public static final String MESSAGE_BEFORE_AFTER_TEST = "Method executed before tests in class ";
 
 	private TestDetails testDetailsOfCurrentTest;
+
+	private int totalResponeTimeMs = 0;
 
 	/** Constructor. */
 	private JaCoCoAgentController() {
@@ -65,7 +68,9 @@ public class JaCoCoAgentController {
 			}
 
 			testDetailsOfCurrentTest = testDetails;
-			System.out.println("Test start ("+testDetails.externalId+"):" + tiaClient.handleTestStart(testDetails.externalId, testDetails).execute().body());
+			Response<String> response = tiaClient.handleTestStart(testDetails.externalId, testDetails).execute();
+			totalResponeTimeMs += response.raw().receivedResponseAtMillis() - response.raw().sentRequestAtMillis();
+			System.out.println("Test start ("+testDetails.externalId+"):" + response.body());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -80,9 +85,14 @@ public class JaCoCoAgentController {
 				testDetailsOfCurrentTest = null;
 			}
 
-			tiaClient.handleTestEnd(testDetails.externalId, consoleOutput, result).execute();
+			Response<String> response = tiaClient.handleTestEnd(testDetails.externalId, consoleOutput, result).execute();
+			totalResponeTimeMs += response.raw().receivedResponseAtMillis() - response.raw().sentRequestAtMillis();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getTotalResponeTimeMs() {
+		return totalResponeTimeMs;
 	}
 }
