@@ -12,7 +12,6 @@ import okhttp3.HttpUrl;
 import org.conqat.lib.commons.collections.CollectionUtils;
 import org.conqat.lib.commons.filesystem.FileSystemUtils;
 import org.conqat.lib.commons.string.StringUtils;
-import org.jacoco.core.runtime.WildcardMatcher;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -113,6 +112,9 @@ public class AgentOptionsParser {
 				return true;
 			case "out":
 				options.outputDirectory = parsePath(key, value);
+				return true;
+			case "module":
+				options.moduleName = value;
 				return true;
 			case "upload-url":
 				options.uploadUrl = parseUrl(value);

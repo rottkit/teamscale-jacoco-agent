@@ -31,6 +31,9 @@ public class TestDetails {
 	 */
 	public final String content;
 
+	/** The project/subproject/module name from which the test stems from. Null if not known. */
+	public final String module;
+
 	/** Constructor. */
 	public TestDetails(String externalId, String internalId, String sourcePath, String displayName, String content) {
 		this.externalId = externalId;
@@ -38,5 +41,16 @@ public class TestDetails {
 		this.sourcePath = sourcePath;
 		this.displayName = displayName;
 		this.content = content;
+		this.module = null;
 	}
+
+	public TestDetails(TestDetails testDetails, String module) {
+		this.externalId = testDetails.externalId;
+		this.internalId = testDetails.internalId;
+		this.sourcePath = testDetails.sourcePath;
+		this.displayName = testDetails.displayName;
+		this.content = testDetails.content;
+		this.module = module;
+	}
+
 }

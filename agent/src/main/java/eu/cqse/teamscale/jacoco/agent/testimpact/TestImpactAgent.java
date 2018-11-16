@@ -63,7 +63,7 @@ public class TestImpactAgent extends AgentBase {
 			testListeners.add(new JUnitReportCollector());
 		}
 		if (reportFormats.contains(TEST_LIST)) {
-			testListeners.add(new TestDetailsCollector());
+			testListeners.add(new TestDetailsCollector(options));
 		}
 		if (reportFormats.contains(TESTWISE_COVERAGE)) {
 			testListeners.add(new TestwiseCoverageCollector(controller, options));

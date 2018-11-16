@@ -2,6 +2,7 @@ package eu.cqse.teamscale.jacoco.agent.testimpact;
 
 import com.google.gson.Gson;
 import eu.cqse.teamscale.client.TestDetails;
+import eu.cqse.teamscale.jacoco.agent.AgentOptions;
 import eu.cqse.teamscale.jacoco.agent.ITestListener;
 import eu.cqse.teamscale.jacoco.agent.store.IXmlStore;
 import eu.cqse.teamscale.report.jacoco.dump.Dump;
@@ -26,6 +27,13 @@ public class TestDetailsCollector implements ITestListener {
 	/** Contains all test details for all tests that have been executed so far. */
 	private final List<TestDetails> testDetailsList = new ArrayList<>();
 
+	/** The project/subproject/module name for which we collect coverage. If not null, this will overwrite the module attribute in the TestDetails. */
+	private final String module;
+
+	public TestDetailsCollector(AgentOptions options) {
+		this.module = options.getModuleName();
+	}
+
 	@Override
 	public void onTestStart(Request request, Dump dump) {
 		addTestDetail(request);
@@ -34,7 +42,7 @@ public class TestDetailsCollector implements ITestListener {
 	private void addTestDetail(Request request) {
 		TestDetails testDetails = getTestDetailsFromRequest(request, logger);
 		if (testDetails != null) {
-			this.testDetailsList.add(testDetails);
+			this.testDetailsList.add(new TestDetails(testDetails, module));
 		}
 	}
 

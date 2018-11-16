@@ -20,7 +20,7 @@ import org.conqat.lib.commons.assertion.CCSMAssert;
 import org.conqat.lib.commons.collections.CollectionUtils;
 import org.conqat.lib.commons.collections.PairList;
 import org.conqat.lib.commons.filesystem.FileSystemUtils;
-import org.jacoco.core.runtime.WildcardMatcher;
+import org.conqat.lib.commons.string.StringUtils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -56,6 +56,12 @@ public class AgentOptions {
 	 * The directory to write the XML traces to.
 	 */
 	/* package */ Path outputDirectory = null;
+
+	/**
+	 * The project/subproject/module for which coverage is collected. If set, this will overwrite the module attribute in the TestDetails.
+	 * Also used as prefix for the output file.
+	 */
+	/* package */ String moduleName = null;
 
 	/**
 	 * The URL to which to upload coverage zips.
@@ -196,7 +202,7 @@ public class AgentOptions {
 	 * Creates the store to use for the coverage XMLs.
 	 */
 	public IXmlStore createStore() {
-		TimestampedFileStore fileStore = new TimestampedFileStore(outputDirectory);
+		TimestampedFileStore fileStore = new TimestampedFileStore(outputDirectory, moduleName);
 		if (uploadUrl != null) {
 			return new HttpUploadStore(fileStore, uploadUrl, additionalMetaDataFiles);
 		}
@@ -263,6 +269,13 @@ public class AgentOptions {
 	 */
 	public Path getLoggingConfig() {
 		return loggingConfig;
+	}
+
+	/**
+	 * @see #moduleName
+	 */
+	public String getModuleName() {
+		return moduleName;
 	}
 
 	/**
