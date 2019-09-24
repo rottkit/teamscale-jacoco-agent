@@ -33,7 +33,7 @@ ext {
 jar {
 	classifier = null
 	manifest {
-		attributes 'Premain-Class': 'eu.cqse.teamscale.jacoco.agent.PreMain'
+		attributes 'Premain-Class': 'com.teamscale.jacoco.agent.PreMain'
 	}
 }
 
@@ -87,7 +87,7 @@ shadowJar {
 	// update
 	version = null
 	manifest {
-		attributes 'Premain-Class': 'eu.cqse.teamscale.jacoco.agent.PreMain'
+		attributes 'Premain-Class': 'com.teamscale.jacoco.agent.PreMain'
 
 		// The jaxb library, which we are shading is a multi release jar, so we have to explicitly "inherit" this attribute
 		attributes 'Multi-Release': 'true'

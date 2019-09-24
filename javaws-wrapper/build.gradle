@@ -34,12 +34,12 @@ distributions {
 				rename 'README.pdf', 'userguide.pdf'
 			}
 
-			from(project(':eu.cqse.teamscale.jacoco.agent').tasks.readmeToPdf) {
+			from(project(':com.teamscale.jacoco.agent').tasks.readmeToPdf) {
 				rename('README.pdf', 'agent-userguide.pdf')
 				into 'documentation'
 			}
 
-			from(project(':eu.cqse.teamscale.jacoco.agent').tasks.shadowJar) {
+			from(project(':com.teamscale.jacoco.agent').tasks.shadowJar) {
 				rename(/.*/, 'agent.jar')
 			}
 		}
