@@ -1,9 +1,9 @@
-package eu.cqse.teamscale.jacoco.agent.controllers;
+package com.teamscale.jacoco.agent.agent.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import eu.cqse.teamscale.client.TestDetails;
-import eu.cqse.teamscale.jacoco.agent.testimpact.ETestExecutionResult;
+import com.teamscale.client.TestDetails;
+import com.teamscale.report.testwise.model.ETestExecutionResult;
 import org.conqat.lib.commons.string.StringUtils;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,13 +52,13 @@ public class JaCoCoAgentController {
 	public void onTestStart(TestDetails testDetails) {
 		try {
 			if (Objects.nonNull(testDetailsOfCurrentTest)) {
-				String message = "For test " + testDetails.externalId + " there was no end event passed to the test listener; assume that it ended now with an error.";
+				String message = "For test " + testDetails.uniformPath + " there was no end event passed to the test listener; assume that it ended now with an error.";
 				System.out.println(message);
 				onTestFinish(testDetails, ETestExecutionResult.ERROR.name(), message);
 			}
 
 			testDetailsOfCurrentTest = testDetails;
-			System.out.println("Test start ("+testDetails.externalId+"):" + tiaClient.handleTestStart(testDetails.externalId, testDetails).execute().body());
+			System.out.println("Test start ("+testDetails.uniformPath+"):" + tiaClient.handleTestStart(testDetails.uniformPath, testDetails).execute().body());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -69,11 +69,11 @@ public class JaCoCoAgentController {
 	 */
 	public void onTestFinish(TestDetails testDetails, String result, String consoleOutput) {
 		try {
-			if (testDetailsOfCurrentTest.externalId.equals(testDetails.externalId)) {
+			if (testDetailsOfCurrentTest.uniformPath.equals(testDetails.uniformPath)) {
 				testDetailsOfCurrentTest = null;
 			}
 
-			tiaClient.handleTestEnd(testDetails.externalId, consoleOutput, result).execute();
+			tiaClient.handleTestEnd(testDetails.uniformPath, consoleOutput, result).execute();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

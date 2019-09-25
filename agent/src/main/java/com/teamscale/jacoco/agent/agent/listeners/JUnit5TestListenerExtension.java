@@ -1,8 +1,8 @@
-package eu.cqse.teamscale.jacoco.agent.listeners;
+package com.teamscale.jacoco.agent.agent.listeners;
 
-import eu.cqse.teamscale.client.TestDetails;
-import eu.cqse.teamscale.jacoco.agent.controllers.JaCoCoAgentController;
-import eu.cqse.teamscale.jacoco.agent.testimpact.ETestExecutionResult;
+import com.teamscale.client.TestDetails;
+import com.teamscale.jacoco.agent.agent.controllers.JaCoCoAgentController;
+import com.teamscale.report.testwise.model.ETestExecutionResult;
 import org.conqat.lib.commons.string.StringUtils;
 import org.junit.platform.commons.util.ExceptionUtils;
 import org.junit.platform.engine.TestExecutionResult;
@@ -44,10 +44,10 @@ public class JUnit5TestListenerExtension implements TestExecutionListener {
 	private TestDetails createTestDetailsFromTestIdentifier(TestIdentifier testIdentifier) {
         Class testClass = findTestMethodClass(testPlan, testIdentifier);
 
-        String externalId = testIdentifier.getUniqueId();
+        String uniformPath = testIdentifier.getUniqueId();
 
         String methodName = testIdentifier.getSource().map(testSource -> ((MethodSource) testSource).getMethodName()).get();
-        String suffixForDynamicOrParametricTest = externalId.substring(externalId.lastIndexOf(methodName));
+        String suffixForDynamicOrParametricTest = uniformPath.substring(uniformPath.lastIndexOf(methodName));
         if (suffixForDynamicOrParametricTest.contains("/")) {
             suffixForDynamicOrParametricTest = suffixForDynamicOrParametricTest
                     .substring(suffixForDynamicOrParametricTest.lastIndexOf('/') + 1);
@@ -63,7 +63,7 @@ public class JUnit5TestListenerExtension implements TestExecutionListener {
                 new File(testClass.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath() + "/");
         sourcePath = StringUtils.stripSuffix(sourcePath, ".class") + ".java";
 
-		return new TestDetails(externalId, internalId, sourcePath, displayName, testIdentifier.getDisplayName());
+		return new TestDetails(uniformPath, sourcePath, displayName);
 	}
 
     private static Class findTestMethodClass(TestPlan testPlan, TestIdentifier identifier) {

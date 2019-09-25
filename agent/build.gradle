@@ -46,7 +46,7 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.sparkjava:spark-core:2.7.2'
-
+	implementation 'com.google.code.gson:gson:2.8.5'
 	implementation 'com.squareup.moshi:moshi:1.8.0'
 
 	implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
@@ -60,6 +60,7 @@ dependencies {
 	compile group: 'org.testng', name: 'testng', version: '6.11'
 
 	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+	implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 	implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.assertj:assertj-core:3.8.0'
@@ -87,6 +88,7 @@ shadowJar {
 		attributes 'Multi-Release': 'true'
 	}
 
+	relocate 'org.junit', 'org.junit'
 	// Fix relocation of multi version jar
 	// Default would be shadow/META-INF/versions/9/, which is wrong
 	// See http://openjdk.java.net/jeps/238

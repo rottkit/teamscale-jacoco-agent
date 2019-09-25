@@ -1,8 +1,8 @@
-package eu.cqse.teamscale.jacoco.agent.listeners;
+package com.teamscale.jacoco.agent.agent.listeners;
 
-import eu.cqse.teamscale.client.TestDetails;
-import eu.cqse.teamscale.jacoco.agent.controllers.JaCoCoAgentController;
-import eu.cqse.teamscale.jacoco.agent.testimpact.ETestExecutionResult;
+import com.teamscale.client.TestDetails;
+import com.teamscale.jacoco.agent.agent.controllers.JaCoCoAgentController;
+import com.teamscale.report.testwise.model.ETestExecutionResult;
 import org.conqat.lib.commons.string.StringUtils;
 import org.junit.platform.commons.util.ExceptionUtils;
 import org.junit.runner.Description;
@@ -51,14 +51,14 @@ public class TestNGListener extends JUnit4Listener implements ITestListener {
     private TestDetails createTestDetailsFromDescription(ITestResult description) {
         Class testClass = description.getTestClass().getRealClass();
 
-        String externalId = testClass.getName() + ":" + description.getMethod().getMethodName();
+        String uniformPath = testClass.getName() + ":" + description.getMethod().getMethodName();
         String internalId = testClass.getCanonicalName().replaceAll("\\.", "/") + "/" + description.getMethod().getMethodName();
         String sourcePath = StringUtils.stripPrefix(
                 new File(testClass.getResource(testClass.getSimpleName() + ".class").getPath()).getAbsolutePath(),
                 new File(testClass.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath() + "/");
         sourcePath = StringUtils.stripSuffix(sourcePath, ".class") + ".java";
 
-        return new TestDetails(externalId, internalId, sourcePath, description.getMethod().getMethodName() + "(" + testClass.getName() + ")", "");
+        return new TestDetails(uniformPath, sourcePath, description.getMethod().getMethodName() + "(" + testClass.getName() + ")");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package eu.cqse.teamscale.jacoco.agent.controllers;
+package com.teamscale.jacoco.agent.agent.controllers;
 
 /**
  * Wrapper around errors originating from the {@link JaCoCoAgentController}.

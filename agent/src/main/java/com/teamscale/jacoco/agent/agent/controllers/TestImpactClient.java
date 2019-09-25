@@ -1,6 +1,6 @@
-package eu.cqse.teamscale.jacoco.agent.controllers;
+package com.teamscale.jacoco.agent.agent.controllers;
 
-import eu.cqse.teamscale.client.TestDetails;
+import com.teamscale.client.TestDetails;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
