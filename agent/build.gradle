@@ -62,7 +62,7 @@ dependencies {
 	compile group: 'org.ow2.asm', name: 'asm', version: '6.2.1'
 
 	compile group: 'junit', name: 'junit', version: '4.12'
-	compileOnly group: 'org.testng', name: 'testng', version: '6.11'
+	compile group: 'org.testng', name: 'testng', version: '6.11'
 
 	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 	implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
@@ -96,6 +96,7 @@ shadowJar {
 	// Don't relocate our own code
 	// The plugin-shadow plugin by default relocates all packages to shadow.* and we are overriding this here
 	relocate 'eu.cqse', 'eu.cqse'
+	relocate 'org.junit', 'org.junit'
 
 	// Fix relocation of multi version jar
 	// Default would be shadow/META-INF/versions/9/, which is wrong
