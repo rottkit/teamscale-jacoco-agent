@@ -10,6 +10,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * JUnit listener that instructs JaCoCo to create one session per test.
@@ -59,10 +60,15 @@ public class JUnit4Listener extends RunListener {
         Class testClass = description.getTestClass();
         String externalId = description.getClassName() + ":" + description.getMethodName();
         String internalId = testClass.getCanonicalName().replaceAll("\\.", "/") + "/" + description.getMethodName();
-        String sourcePath = StringUtils.stripPrefix(
-                new File(testClass.getResource(testClass.getSimpleName() + ".class").getPath()).getAbsolutePath(),
-                new File(testClass.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath() + "/");
-        sourcePath = StringUtils.stripSuffix(sourcePath, ".class") + ".java";
+        URL classResource = testClass.getResource(testClass.getSimpleName() + ".class");
+        String sourcePath = "unknown";
+        if (classResource != null) {
+            sourcePath = StringUtils.stripPrefix(
+                    new File(classResource.getPath()).getAbsolutePath(),
+                    new File(testClass.getProtectionDomain().getCodeSource().getLocation().getPath())
+                            .getAbsolutePath() + "/");
+            sourcePath = StringUtils.stripSuffix(sourcePath, ".class") + ".java";
+        }
 
         return new TestDetails(externalId, internalId, sourcePath, description.getDisplayName(), "");
     }
